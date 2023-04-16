@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import img1 from './settings.png';
 import donate from './income.png';
 import search from './search.png';
@@ -8,10 +8,9 @@ import info from './info.png';
 import './AgentDashboard.css';
 import { Link, useNavigate } from 'react-router-dom';
 import AgentForm from '../AgentForm/AgentForm';
+import axios from '../../../axios';
 
 const AgentDashboard = () => {
-
-    const navigate = useNavigate();
 
     const shoot = () => {
         alert("You're logged out!");
@@ -28,6 +27,18 @@ const AgentDashboard = () => {
 
     const [itemID,setItemID] = useState(null); 
     const [displayDashboard, setDisplayDashboard] = useState(true);
+    const [assignedTasks, setAssignedTasks] = useState([]);
+
+    useEffect(() => {
+        const timer = setTimeout(async () => {
+            const response = await axios.post('/collector/assignedItems',{collectorID:"643aa4db0008520bfd7a07ba"});
+            console.log(response);
+            setAssignedTasks(response.data.assignedItems);
+        },500);
+        return () => {
+            clearTimeout(timer);
+        }
+    }, []);
 
     const handleAgentForm = (e,task) => {
         //navigate("/agentForm",{state: {id:1,name:'sabaoon'}});
@@ -122,17 +133,19 @@ const AgentDashboard = () => {
                 <table>
                     <tr>
                         <th>Donor Name</th>
-                        <th>Address</th>
+                        <th>Region</th>
                         <th>Item</th>
+                        <th>Category</th>
                         <th>Action</th>
                     </tr>
                     {
-                        data.map((task) => {
+                        assignedTasks.map((task) => {
                             return(
-                                <tr>
+                                <tr key={task._id}>
                                     <td>{task.donorName}</td>
-                                    <td>{task.address}</td>
-                                    <td>{task.item}</td>
+                                    <td>{task.region}</td>
+                                    <td>{task.name}</td>
+                                    <td>{task.category}</td>
                                     <td>
                                         {task.status=='Pick-Up'&&
                                             <a href="#" class="btn" onClick={(e)=>handleAgentForm(e,task)}>{task.status}</a>}
@@ -143,42 +156,6 @@ const AgentDashboard = () => {
                             );
                         })
                     }
-                    {/* <tr>
-                        <td>{Name1}</td>
-                        <td>{Place1}</td>
-                        <td>{Item1}</td>
-                        <td><a href="#" class="btn" onClick={()=> setText1("Viewed")}>{Text1}</a></td>
-                    </tr>
-                    <tr>
-                        <td>{Name2}</td>
-                        <td>{Place2}</td>
-                        <td>{Item2}</td>
-                        <td><a href="#" class="btn" onClick={()=> setText2("Viewed")}>{Text2}</a></td>
-                    </tr>
-                    <tr>
-                        <td>{Name3}</td>
-                        <td>{Place3}</td>
-                        <td>{Item3}</td>
-                        <td><a href="#" class="btn" onClick={()=> setText3("Viewed")}>{Text3}</a></td>
-                    </tr>
-                    <tr>
-                        <td>{Name4}</td>
-                        <td>{Place4}</td>
-                        <td>{Item4}</td>
-                        <td><a href="#" class="btn" onClick={()=> setText4("Viewed")}>{Text4}</a></td>
-                    </tr>
-                    <tr>
-                        <td>{Name5}</td>
-                        <td>{Place5}</td>
-                        <td>{Item5}</td>
-                        <td><a href="#" class="btn" onClick={()=> setText5("Viewed")}>{Text5}</a></td>
-                    </tr>
-                    <tr>
-                        <td>{Name6}</td>
-                        <td>{Place6}</td>
-                        <td>{Item6}</td>
-                        <td><a href="#" class="btn" onClick={()=> setText6("Viewed")}>{Text6}</a></td>
-                    </tr> */}
                 </table>
                 </div>
                 <div class="new-students">
