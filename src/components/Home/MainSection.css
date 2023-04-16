@@ -1,0 +1,38 @@
+
+  .main-container {
+    background-image: url('../../../public/images/back.png');
+    height: 90vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.2);
+    object-fit: contain;
+  }
+
+  
+
+  .text{
+    margin-top: 1px;
+    color: #fff;
+    font-size: 25px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande',
+      'Lucida Sans', Arial, sans-serif;
+  }
+
+  
+  .text > a {
+    text-decoration: none;
+    color: rgb(250, 228, 191);
+    font-size: 10;
+    margin-top: -70px;
+  }
+
+  .text:hover{
+    border-bottom: 5px solid rgb(241, 216, 176);
+    border-top: 5px solid rgb(241, 216, 176);
+  transition: all 0.2s ease-out;
+  font-size: 1.3rem;
+  color: rgb(233, 149, 31);
+  }
