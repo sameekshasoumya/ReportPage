@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import img1 from './settings.png';
 import donate from './income.png';
 import search from './search.png';
@@ -6,6 +6,10 @@ import user from './user.png';
 import notifs from './notifications.png';
 import info from './info.png';
 import './AdminDashboard.css';
+import axios from '../../../axios';
+import DonatedItems from './DonatedItems';
+import Agents from './Agents';
+import Donors from './Donors';
 
 const AdminDashboard = () => {
 
@@ -31,6 +35,41 @@ const AdminDashboard = () => {
         }
     ];
 
+    const [donatedItems,setDonatedItems] = useState([]);
+    const [updateComponent, setUpdateComponent] = useState(false);
+    const [agentRequest, setAgentRequests] = useState([]);
+    const [tabView, setTabView] = useState("Admin");
+
+    useEffect(() => {
+        const timer = setTimeout(async () => {
+            const resDonatedItems = await axios.post('/items/',{page:1,limit:100});
+            console.log(resDonatedItems);
+            setDonatedItems(resDonatedItems.data.products);
+            const resAgentRequests = await axios.post('/admin/requests',{page:1,limit:100});
+            console.log(resAgentRequests);
+            setAgentRequests(resAgentRequests.data.allRequests);
+        },500);
+        return () => {clearTimeout(timer);};
+    }, [updateComponent]);
+
+    const handleApproval = async (e, agentID, approval) =>{
+        e.preventDefault();
+        const response = await axios.post('/admin/approval',{_id: agentID, approval:approval});
+        if(response.status == 200){
+            setUpdateComponent(prevState=>{
+                return !prevState;
+            })
+        }
+        else{
+            alert(response.message);
+        }
+    }
+
+    const handleChange = (e,view) => {
+        e.preventDefault();
+        setTabView(view);
+    }
+
     const [here,setHere] = useState("Approve");
     const [current,setCurrent] = useState("Accept All");
     const [donorNumber,setDonorNumber] = useState("1023");
@@ -45,13 +84,13 @@ const AdminDashboard = () => {
             <h1>Admin Panel</h1>
         </div>
         <ul>
-            <li><img src={img1} alt=""/>&nbsp; <span>Dashboard</span></li>
-            <a href="./DonorList"><li><img src={img1} alt=""/>&nbsp; <span></span>Donors</li></a>
-            <li><img src={img1} alt=""/>&nbsp; <span></span>MiddleMan</li>
+            <a href="#" onClick={(e)=>handleChange(e,'Admin')}><li className={tabView=='Admin'?'highlight':''}><img src={img1} alt=""/>&nbsp; <span>Dashboard</span></li></a>
+            <a href="./Donor" onClick={(e)=>handleChange(e,'Donor')}><li className={tabView=='Donor'?'highlight':''}><img src={img1} alt=""/>&nbsp; <span></span>Donors</li></a>
+            <a href="./Agent" onClick={(e)=>handleChange(e,'Agent')}><li className={tabView=='Agent'?'highlight':''}><img src={img1} alt=""/>&nbsp; <span></span>Agent</li></a>
             <li><img src={img1} alt=""/>&nbsp; <span></span>Regions</li>
             <li><img src={img1} alt=""/>&nbsp; <span></span>Categories</li>
-            <li><img src={img1} alt=""/>&nbsp; <span></span>Help-desk</li>
-            <li><img src={img1} alt=""/>&nbsp; <span></span>Settings</li>
+            {/* <li><img src={img1} alt=""/>&nbsp; <span></span>Help-desk</li>
+            <li><img src={img1} alt=""/>&nbsp; <span></span>Settings</li> */}
         </ul>
     </div>
     <div class="container">
@@ -110,34 +149,12 @@ const AdminDashboard = () => {
                 </div>
             </div>
             <div class="content-2">
-                <div class="recent-payments">
-                <div class="title">
-                    <h2>Donation Item Status</h2>
-                </div>
-                <table>
-                    <tr>
-                        <th>Name</th>
-                        <th>Region</th>
-                        <th>Category</th>
-                        <th>Agent</th>
-                        <th>Status</th>
-                    </tr>
-                    {
-                        data.map((item)=>{
-                            return(
-                                <tr>
-                                    <td>{item.name}</td>
-                                    <td>{item.region}</td>
-                                    <td>{item.category}</td>
-                                    <td>{item.agent}</td>
-                                    <td><a href="#" class="btn">{item.status}</a></td>
-                                </tr> 
-                            );
-                        })
-                    }
-                    
-                </table>
-                </div>
+                {tabView=='Admin'&&
+                    <DonatedItems donatedItems={donatedItems} setUpdateComponent={setUpdateComponent}/>}
+                {tabView=='Agent'&&
+                    <Agents/>}
+                {tabView=='Donor'&&
+                    <Donors/>}
                 <div class="new-students">
                     <div class="title">
                         <h2>Pending Approval</h2>
@@ -149,12 +166,13 @@ const AdminDashboard = () => {
                             {/* <th>Approve</th> */}
                         </tr>
                         {
-                            agent.map((agent)=>{
+                            agentRequest.map((agent)=>{
                                 return(
                                     <tr>
                                         <td>{agent.name}</td>
                                         <td>{agent.region}</td>
-                                        <td><a href="#" class="btn">{here}</a></td>
+                                        <td><a href="#" class="btn" onClick={(e)=>handleApproval(e,agent._id,1)}>Accept</a></td>
+                                        <td><a href="#" class="btn" onClick={(e)=>handleApproval(e,agent._id,0)}>Reject</a></td>
                                     </tr>
                                 );
                             })

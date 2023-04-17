@@ -9,6 +9,9 @@ import './AgentDashboard.css';
 import { Link, useNavigate } from 'react-router-dom';
 import AgentForm from '../AgentForm/AgentForm';
 import axios from '../../../axios';
+import PickUpForm from '../AgentForm/PickUpForm';
+import DeliveryForm from '../AgentForm/DeliveryForm';
+import UpdateProfileForm from '../AgentForm/UpdateProfile';
 
 const AgentDashboard = () => {
 
@@ -28,27 +31,39 @@ const AgentDashboard = () => {
     const [itemID,setItemID] = useState(null); 
     const [displayDashboard, setDisplayDashboard] = useState(true);
     const [assignedTasks, setAssignedTasks] = useState([]);
+    const [type,setType] = useState("");
+    const [collectorID,setCollectorID] = useState(localStorage.getItem('collectorID'));
+    const [agentData, setAgentData] = useState({});
 
     useEffect(() => {
         const timer = setTimeout(async () => {
+            const resAgent = await axios.post('/collector/get',{collectorID:"643aa4db0008520bfd7a07ba"});
+            console.log(resAgent);
+            setAgentData(resAgent.data.collector);
             const response = await axios.post('/collector/assignedItems',{collectorID:"643aa4db0008520bfd7a07ba"});
             console.log(response);
             setAssignedTasks(response.data.assignedItems);
         },500);
-        return () => {
-            clearTimeout(timer);
-        }
+        return () => {clearTimeout(timer);};
     }, []);
 
-    const handleAgentForm = (e,task) => {
-        //navigate("/agentForm",{state: {id:1,name:'sabaoon'}});
+    const handleAgentForm = (e,task,status) => {
        e.preventDefault();
        console.log(task);
+       setType(status);
        setDisplayDashboard(prevState=>{
             return !prevState;
        });
-       setItemID(task.item);
+       setItemID(task._id);
+    }
 
+    const handleUpdateProfile = (e) => {
+        e.preventDefault();
+        console.log(collectorID);
+        setDisplayDashboard(prevState=>{
+            return !prevState;
+       });
+       setType('UpdateProfile');
     }
    
     const [here,setHere] = useState("FORM"); 
@@ -62,12 +77,11 @@ const AgentDashboard = () => {
         <>
             <div class="side-menu">
         <div class="brand-name">
-            <h1>{userName}</h1>
+            <h1>{agentData.name}</h1>
         </div>
         <ul>
-            <li><img src={img1} alt=""/>&nbsp; <span>Dashboard</span></li>
-            <li><img src={img1} alt=""/>&nbsp; <span></span>Help-desk</li>
-            <li><img src={img1} alt=""/>&nbsp; <span></span>Settings</li>
+            <a><li><img src={img1} alt=""/>&nbsp; <span>Dashboard</span></li></a>
+            <a href="../AgentForm/UpdateProfile" onClick={(e)=>handleUpdateProfile(e)}> <li><img src={img1} alt=""/>&nbsp; Update Profile</li></a>
         </ul>
     </div>
     <div class="container">
@@ -147,10 +161,14 @@ const AgentDashboard = () => {
                                     <td>{task.name}</td>
                                     <td>{task.category}</td>
                                     <td>
-                                        {task.status=='Pick-Up'&&
-                                            <a href="#" class="btn" onClick={(e)=>handleAgentForm(e,task)}>{task.status}</a>}
-                                        {!(task.status=='Pick-Up')&&
-                                        <a href="#" class="btn">{task.status}</a>}
+                                        {task.status=='Assigned'&&
+                                            <a href="./pickUpForm" class="btn" onClick={(e)=>handleAgentForm(e,task,"Pick Up")}>Pick Up</a>}
+                                        {task.status=='Picked Up'&&
+                                            <a href="./agentForm" class="btn" onClick={(e)=>handleAgentForm(e,task,"Mend")}>Add Charges</a>}
+                                        {(task.status=='Mended')&&
+                                            <a href="./deliveryForm" class="btn" onClick={(e)=>handleAgentForm(e,task,"Deliver")}>Deliver</a>}
+                                        {(task.status=='Delivered')&&
+                                            <a href="#" class="btn">Delivered</a>}
                                     </td>
                                 </tr>
                             );
@@ -176,10 +194,14 @@ const AgentDashboard = () => {
 
     if(displayDashboard)
         return agentDashboard;
-    else
-        return <AgentForm state={itemID} setDisplayDashboard={setDisplayDashboard}/>
-    
-    
+    else if(type=="Pick Up")
+        return <PickUpForm itemID={itemID} setDisplayDashboard={setDisplayDashboard} setType={setType}/>;
+    else if(type=="Mend")
+        return <AgentForm itemID={itemID} setDisplayDashboard={setDisplayDashboard} setType={setType}/>;
+    else if(type=="Deliver")
+        return <DeliveryForm itemID={itemID} setDisplayDashboard={setDisplayDashboard} setType={setType}/>;
+    else if(type=="UpdateProfile")
+        return <UpdateProfileForm collectorID={collectorID} setDisplayDashboard={setDisplayDashboard} setType={setType}/>;             
 }
 
 export default AgentDashboard;

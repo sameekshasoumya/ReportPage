@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import img1 from './settings.png';
 import donate from './income.png';
 import search from './search.png';
@@ -6,6 +6,7 @@ import user from './user.png';
 import notifs from './notifications.png';
 import info from './info.png';
 import './DonorDashboard.css';
+import axios from '../../../axios';
 
 const DonorDashboard = () => {
 
@@ -26,6 +27,29 @@ const DonorDashboard = () => {
         }
     ]);
 
+    const [donator, setDonator] = useState({});
+    const [donatedItems, setDonatedItems] = useState([]);
+    const [tabView, setTabView] = useState("Dashboard");
+    const [donatorID,setDonatorID] = useState(localStorage.getItem('donatorID'));
+
+    useEffect(() => {
+        const timer = setTimeout(async () => {
+            const resDonator = await axios.post('/donator/get',{donatorID:"64260e700667c58853f69e60"});
+            console.log(resDonator);
+            setDonator(resDonator.data.donator);
+            const resDonatedItems = await axios.post('/donator/items',{donatorID:"64260e700667c58853f69e60"});
+            console.log(resDonatedItems);
+            setDonatedItems(resDonatedItems.data.donatedItems);
+
+        },500);
+        return () => {clearTimeout(timer);};
+    }, []);
+
+    const handleChange = (e,view) => {
+        e.preventDefault();
+        setTabView(view);
+    }
+
     const [here,setHere] = useState("FORM"); 
     const [userName,setUserName] = useState("Donor XYZ"); 
     const [donorNumber,setDonorNumber] = useState("1023");
@@ -37,10 +61,10 @@ const DonorDashboard = () => {
         <>
             <div class="side-menu">
         <div class="brand-name">
-            <h1>{userName}</h1>
+            <h1>{donator.name}</h1>
         </div>
         <ul>
-            <li><img src={img1} alt=""/>&nbsp; <span>Dashboard</span></li>
+            <a href="#" onClick={(e)=>handleChange(e,'Dashboard')}><li className={tabView=='Dashboard'?'highlight':''}><img src={img1} alt=""/>&nbsp; <span>Dashboard</span></li></a>
             <li><img src={img1} alt=""/>&nbsp; <span></span>Help-desk</li>
             <li><img src={img1} alt=""/>&nbsp; <span></span>Settings</li>
         </ul>
@@ -114,15 +138,19 @@ const DonorDashboard = () => {
                         <th>Status</th>
                     </tr>
                     {
-                        data.map((items)=>{
+                        donatedItems.map((items)=>{
                             return(
                                 <tr>
                                     <td>{items.name}</td>
                                     <td>{items.region}</td>
                                     <td>{items.category}</td>
-                                    <td>{items.agent.contact}</td>
-                                    <td>{items.status}</td>
-                                    <td><a class="btn">Track</a></td>
+                                    <td>{items.collId}</td>
+                                    <td>
+                                        {(items.status=='Unpaid'||items.status=='Paid')&&
+                                            <a class="btn">Delivered</a>}
+                                        {!(items.status=='Unpaid'||items.status=='Paid')&&
+                                            <a class="btn">{items.status}</a>}
+                                    </td>
                                 </tr>
                             );
                         })

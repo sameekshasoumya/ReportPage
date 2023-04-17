@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import './AgentForm.css';
 import axios from '../../../axios';
 
-const AgentForm = (props) => {
+const PickUpForm = (props) => {
 
     const [userInput,setUserInput] = useState({
         itemID: props.itemID,
-        charges:"",
         file:null
     });
 
@@ -21,7 +20,7 @@ const AgentForm = (props) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const response = await axios.post('/collector/itemUpdate',userInput);
+        const response = await axios.post('/collector/itemCollect',userInput);
         props.setType("");
         if(response.status == 200){
             props.setDisplayDashboard(true);
@@ -37,33 +36,19 @@ const AgentForm = (props) => {
         <div class="form-container">
             <div class="form">
                 <div class="heading">
-                    <h2>Overhead Chagres Form</h2>
+                    <h2>Pick Up Form</h2>
                 </div>
 
                 <div class="form-wrap">
                     <div class="form-item">
                         <label htmlFor="id">Consignment ID</label>
-                        <p>{props.itemID}</p> 
+                        <p>{props.itemID}</p>
                     </div>
                 </div>
 
                 <div class="form-wrap">
                     <div class="form-item">
-                        <label htmlFor="charges">Total Cost incurred</label>
-                        <input type="number" value={userInput.charges} onChange={handleInput} name="charges" id="charges" required/>
-                    </div>
-                </div>
-
-                {/* <div class="form-wrap">
-                    <div class="form-item">
-                        <label>Detailed bill of the cost to agent</label>
-                        <input type="file" required/>
-                    </div>
-                </div> */}
-
-                <div class="form-wrap">
-                    <div class="form-item">
-                        <label>Please upload the condition of item finally, after mending</label>
+                        <label>Please upload the condition of item</label>
                         <input type="file" value={userInput.file} onChange={handleInput} name="file" id="file" required/>
                     </div>
                 </div>
@@ -80,4 +65,4 @@ const AgentForm = (props) => {
     )
 }
 
-export default AgentForm;
+export default PickUpForm;

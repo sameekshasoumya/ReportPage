@@ -11,6 +11,10 @@ import Home from "./components/Home/pages/Home";
 import Services from "./components/Home/pages/Services";
 import Products from "./components/Home/pages/Products";
 import SignUp from "./components/Home/pages/SignUp";
+import PickUpForm from "./components/Agent/AgentForm/PickUpForm";
+import DeliveryForm from "./components/Agent/AgentForm/DeliveryForm";
+import Agents from "./components/Admin/AdminDashboard/Agents";
+import Donors from "./components/Admin/AdminDashboard/Donors";
 
 const App = (props) => {
 
@@ -28,6 +32,8 @@ const App = (props) => {
           <Route path="/agentForm" element={<AgentForm />} />
           <Route path="/agentDashboard" element={<AgentDashboard />} />
           <Route path="/adminDashboard" element={<AdminDashboard />} />
+          <Route path="/pickUpForm" element={<PickUpForm />} />
+          <Route path="/deliveryForm" element={<DeliveryForm />} />
           <Route path="/" element={<Navigate replace to="/home" />} />
         </Routes>
       </BrowserRouter>
