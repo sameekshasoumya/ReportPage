@@ -85,6 +85,11 @@ th,td{
     color: #444;
 }
 
+.highlight{
+    background-color: rgb(135, 135, 135);
+    color: #444;
+}
+
 .container{
     position: absolute;
     right: 0;

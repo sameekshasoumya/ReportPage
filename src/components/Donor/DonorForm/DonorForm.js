@@ -1,17 +1,35 @@
 import React, { useState } from 'react';
 import './DonorForm.css';
+import ImageCropper from '../../Agent/AgentForm/ImageCropper';
+import axios from '../../../axios';
 
-const DonorForm = () => {
+const upload = async (file, event, userInput, donorID, setDisplayDashboard) => {
+    console.log(file);
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('donID', donorID);
+    formData.append('name', userInput.itemName);
+    formData.append('region', userInput.region);
+    formData.append('category', userInput.category);
+    formData.append('address', userInput.address);
+    event.preventDefault();
+    const response = await axios.post('/items/add',formData);
+    if(response.status == 200){
+        alert('Item Added Successfully!');
+    }
+    else{
+        alert(response.message);
+    }
+    await setDisplayDashboard(true);
+}
+
+const DonorForm = (props) => {
 
     const regions = ["Region-1","Region-2","Region-3","Region-4","Region-5"];
     const category = ["Perishable Food Items","Stationary and Books","Furniture","Electronic Items","Clothes"];
 
     const [userInput,setUserInput] = useState({
-        userfirstname: "",
-        userlastname: "",
-        email: "",
-        phone: "",
-        city: "",
+        itemName:"",
         address: "",
         category: category[0],
         region: regions[0]
@@ -37,35 +55,32 @@ const DonorForm = () => {
                 </div>
 
 
-                <div class="form-wrap fullname">
+                <div class="form-wrap">
                     <div class="form-item">
-                        <label htmlFor="userfirstname">First Name</label>
-                        <input type="text" value={userInput.userfirstname} onChange={handleInput} name="userfirstname" id="userfirstname" required/>
-                    </div>
-                    <div class="form-item">
-                        <label htmlFor="userlastname">Last Name</label>
-                        <input type="text" value={userInput.userlastname} onChange={handleInput} name="userlastname" id="userlastname" required/>
+                        <label htmlFor="itemName">Item Name</label>
+                        <input type="text" value={userInput.itemName} onChange={handleInput} name="itemName" id="itemName" required/>
                     </div>
                 </div>
 
-                <div class="form-wrap">
-                    <div class="form-item">
-                        <label htmlFor="email">E-mail Address</label>
-                        <input type="email" value={userInput.email} onChange={handleInput} name="email" id="email" required/>
-                    </div>
-                </div>
-
-                <div class="form-wrap">
+                {/* <div class="form-wrap">
                     <div class="form-item">
                         <label htmlFor="phone">Phone</label>
                         <input type="number" value={userInput.phone} onChange={handleInput} name="phone" id="phone" required/>
                     </div>
-                </div>
+                </div> */}
 
                 <div class="form-wrap select-box">
                     <div class="form-item">
-                        <label htmlFor="city">City</label>
-                        <input type="text" value={userInput.city} onChange={handleInput} name="city" id="city" required/>
+                        <label>Category of Item</label>
+                        <select name="category" value={userInput.category} onChange={handleInput}>
+                            {
+                                category.map((category) => {
+                                    return(
+                                        <option>{category}</option>
+                                    );
+                                })
+                            }
+                        </select>
                     </div>
 
                     <div class="form-item">
@@ -78,11 +93,6 @@ const DonorForm = () => {
                                     );
                                 })
                             }
-                            {/* <option>Region-1</option>
-                            <option>Region-2</option>
-                            <option>Region-3</option>
-                            <option>Region-4</option>
-                            <option>Region-5</option> */}
                         </select>
                     </div>
                 </div>
@@ -94,37 +104,16 @@ const DonorForm = () => {
                     </div>
                 </div>
 
-                <div class="form-wrap select-box">
-                    <div class="form-item2">
-                        <label>Category of Item for Donation</label>
-                        <select name="category" value={userInput.category} onChange={handleInput}>
-                            {
-                                category.map((category) => {
-                                    return(
-                                        <option>{category}</option>
-                                    );
-                                })
-                            }
-                            {/* <option>Perishable Food Items</option>
-                            <option>Stationary and Books</option>
-                            <option>Furniture</option>
-                            <option>Electronic Items</option>
-                            <option>Clothes</option> */}
-                        </select>
-                    </div>
-                </div>
+                
                 <br/>
 
-                <div class="form-wrap">
-                    <div class="form-item">
-                        <label>Please upload the image of item to be donated (in exact same condition)</label>
-                        <input type="file" onChange={(event)=>{setFile(event.target.files)}} required/>
-                    </div>
-                </div>
+                <ImageCropper 
+                        uploadFile={image => {setFile(image)}}
+                    />
                 <br/>
 
                 <div class="btn">
-                    <input type="submit" value="Submit Request"/>
+                    <input type="submit" value="Submit Request" onClick={(event) => upload(file, event,userInput,props.donorID , props.setDisplayDashboard)}/>
                 </div>
 
             </div>

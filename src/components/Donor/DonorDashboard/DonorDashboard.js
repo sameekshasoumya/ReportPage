@@ -7,6 +7,7 @@ import notifs from './notifications.png';
 import info from './info.png';
 import './DonorDashboard.css';
 import axios from '../../../axios';
+import DonorForm from '../DonorForm/DonorForm';
 
 const DonorDashboard = () => {
 
@@ -30,20 +31,39 @@ const DonorDashboard = () => {
     const [donator, setDonator] = useState({});
     const [donatedItems, setDonatedItems] = useState([]);
     const [tabView, setTabView] = useState("Dashboard");
+    const [displayDashboard, setDisplayDashboard] = useState(true);
     const [donatorID,setDonatorID] = useState(localStorage.getItem('donatorID'));
+    const donorID = "64260e700667c58853f69e60"; //Remove after login and change everywhere to donatorID
 
     useEffect(() => {
         const timer = setTimeout(async () => {
-            const resDonator = await axios.post('/donator/get',{donatorID:"64260e700667c58853f69e60"});
+            const resDonator = await axios.post('/donator/get',{donatorID: donorID});
             console.log(resDonator);
             setDonator(resDonator.data.donator);
-            const resDonatedItems = await axios.post('/donator/items',{donatorID:"64260e700667c58853f69e60"});
+            const resDonatedItems = await axios.post('/donator/items',{donatorID:donorID});
             console.log(resDonatedItems);
             setDonatedItems(resDonatedItems.data.donatedItems);
 
         },500);
         return () => {clearTimeout(timer);};
     }, []);
+
+    useEffect(() => {
+        const timer = setTimeout(async () => {
+            const resDonatedItems = await axios.post('/donator/items',{donatorID:donorID});
+            console.log(resDonatedItems);
+            setDonatedItems(resDonatedItems.data.donatedItems);
+
+        },500);
+        return () => {clearTimeout(timer);};
+    }, [displayDashboard]);
+
+    const handlePickUp = (e) => {
+        e.preventDefault();
+        setDisplayDashboard(prevState=>{
+            return !prevState;
+        })
+    }
 
     const handleChange = (e,view) => {
         e.preventDefault();
@@ -57,7 +77,7 @@ const DonorDashboard = () => {
     const [regionCount,setRegionCount] = useState("23");
     const [volunteerCount,setVolunteerCount] = useState("23");
 
-    return(
+    const donorDashboard = 
         <>
             <div class="side-menu">
         <div class="brand-name">
@@ -155,60 +175,29 @@ const DonorDashboard = () => {
                             );
                         })
                     }
-                    {/* <tr>
-                        <td>{Name1}</td>
-                        <td>{Place1}</td>
-                        <td>{Item1}</td>
-                        <td><a href="#" class="btn" onClick={()=> setText1("Viewed")}>{Text1}</a></td>
-                    </tr>
-                    <tr>
-                        <td>{Name2}</td>
-                        <td>{Place2}</td>
-                        <td>{Item2}</td>
-                        <td><a href="#" class="btn" onClick={()=> setText2("Viewed")}>{Text2}</a></td>
-                    </tr>
-                    <tr>
-                        <td>{Name3}</td>
-                        <td>{Place3}</td>
-                        <td>{Item3}</td>
-                        <td><a href="#" class="btn" onClick={()=> setText3("Viewed")}>{Text3}</a></td>
-                    </tr>
-                    <tr>
-                        <td>{Name4}</td>
-                        <td>{Place4}</td>
-                        <td>{Item4}</td>
-                        <td><a href="#" class="btn" onClick={()=> setText4("Viewed")}>{Text4}</a></td>
-                    </tr>
-                    <tr>
-                        <td>{Name5}</td>
-                        <td>{Place5}</td>
-                        <td>{Item5}</td>
-                        <td><a href="#" class="btn" onClick={()=> setText5("Viewed")}>{Text5}</a></td>
-                    </tr>
-                    <tr>
-                        <td>{Name6}</td>
-                        <td>{Place6}</td>
-                        <td>{Item6}</td>
-                        <td><a href="#" class="btn" onClick={()=> setText6("Viewed")}>{Text6}</a></td>
-                    </tr> */}
                 </table>
                 </div>
-                {/* <div class="new-students">
+                <div class="new-students">
                     <div class="title">
                         <h2>Request PickUp</h2>
-                        <a href="#" class="btn" onClick={()=>setHere("Filled")}>{here}</a>
+                        <a href="#" class="btn" onClick={(e)=>handlePickUp(e)}>Form</a>
                     </div>
                     <table>
                         <tr>
                         <td>Fill Up the form for a new donation and request pickup</td>                           
                         </tr>
                     </table>
-                </div> */}
+                </div>
             </div>
         </div>
     </div>
-        </>
-    )
+        </>;
+    
+    if(displayDashboard)
+        return donorDashboard;
+    else
+        return <DonorForm donorID={donorID} setDisplayDashboard={setDisplayDashboard} />
+
 }
 
 export default DonorDashboard;

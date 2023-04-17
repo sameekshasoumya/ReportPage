@@ -34,6 +34,7 @@ const AgentDashboard = () => {
     const [type,setType] = useState("");
     const [collectorID,setCollectorID] = useState(localStorage.getItem('collectorID'));
     const [agentData, setAgentData] = useState({});
+    const [tabView, setTabView] = useState("Dashboard");
 
     useEffect(() => {
         const timer = setTimeout(async () => {
@@ -46,6 +47,15 @@ const AgentDashboard = () => {
         },500);
         return () => {clearTimeout(timer);};
     }, []);
+
+    useEffect(() => {
+        const timer = setTimeout(async () => {
+            const response = await axios.post('/collector/assignedItems',{collectorID:"643aa4db0008520bfd7a07ba"});
+            console.log(response);
+            setAssignedTasks(response.data.assignedItems);
+        },500);
+        return () => {clearTimeout(timer);};
+    }, [type]);
 
     const handleAgentForm = (e,task,status) => {
        e.preventDefault();
@@ -65,6 +75,11 @@ const AgentDashboard = () => {
        });
        setType('UpdateProfile');
     }
+
+    const handleChange = (e,view) => {
+        e.preventDefault();
+        setTabView(view);
+    }
    
     const [here,setHere] = useState("FORM"); 
     const [userName,setUserName] = useState("Agent : ABC"); 
@@ -80,7 +95,7 @@ const AgentDashboard = () => {
             <h1>{agentData.name}</h1>
         </div>
         <ul>
-            <a><li><img src={img1} alt=""/>&nbsp; <span>Dashboard</span></li></a>
+            <a href="#" onClick={(e)=>handleChange(e,'Dashboard')}><li className={tabView=='Dashboard'?'highlight':''}><img src={img1} alt=""/>&nbsp; <span>Dashboard</span></li></a>
             <a href="../AgentForm/UpdateProfile" onClick={(e)=>handleUpdateProfile(e)}> <li><img src={img1} alt=""/>&nbsp; Update Profile</li></a>
         </ul>
     </div>
@@ -168,7 +183,9 @@ const AgentDashboard = () => {
                                         {(task.status=='Mended')&&
                                             <a href="./deliveryForm" class="btn" onClick={(e)=>handleAgentForm(e,task,"Deliver")}>Deliver</a>}
                                         {(task.status=='Delivered')&&
-                                            <a href="#" class="btn">Delivered</a>}
+                                            <a href="#" class="btn">Unpaid</a>}
+                                        {(task.status=='Paid')&&
+                                            <a href="#" class="btn">Paid</a>}
                                     </td>
                                 </tr>
                             );

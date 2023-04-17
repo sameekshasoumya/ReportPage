@@ -1,6 +1,25 @@
 import React, { useState } from 'react';
 import './AgentForm.css';
 import axios from '../../../axios';
+import ImageCropper from './ImageCropper';
+
+const upload = async (file, event, itemID, setType, setDisplayDashboard) => {
+    console.log(file);
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('itemID', itemID);
+    event.preventDefault();
+    const response = await axios.post('/collector/itemCollect',formData);
+    await setType("");
+    if(response.status == 200){
+        await setDisplayDashboard(true);
+        alert('Item Status Updated!');
+    }
+    else{
+        alert(response.message);
+    }
+    
+}
 
 const PickUpForm = (props) => {
 
@@ -8,6 +27,8 @@ const PickUpForm = (props) => {
         itemID: props.itemID,
         file:null
     });
+    const [file, setFile] = useState(null);
+
 
     const handleInput = (e) => {
         //e.preventDefault();
@@ -46,16 +67,19 @@ const PickUpForm = (props) => {
                     </div>
                 </div>
 
-                <div class="form-wrap">
+                {/* <div class="form-wrap">
                     <div class="form-item">
                         <label>Please upload the condition of item</label>
                         <input type="file" value={userInput.file} onChange={handleInput} name="file" id="file" required/>
                     </div>
-                </div>
+                </div> */}
+                <ImageCropper 
+                        uploadFile={image => {setFile(image)}}
+                    />
                 <br/>
 
                 <div class="btn">
-                    <input type="submit" value="Submit Request" onClick={(e)=>handleSubmit(e)}/>
+                    <input type="submit" value="Submit Request" onClick={(event) => upload(file, event, userInput.itemID, props.setType, props.setDisplayDashboard)}/>
                 </div>
 
             </div>
