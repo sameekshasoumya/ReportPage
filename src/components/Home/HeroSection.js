@@ -31,20 +31,20 @@ function HeroSection() {
 </div>
 <div class='bottom-text'><h3>IIT (ISM) Dhanbad</h3></div>
       <div className='hero-btns'>
-        <Button
+        {/* <Button
           className='btns'
           buttonStyle='btn--outline'
           buttonSize='btn--large'
         >
           GIVE HELP
-        </Button>
+        </Button> */}
         <Button
           className='btns'
           buttonStyle='btn--primary'
           buttonSize='btn--large'
           onClick={console.log('hey')}
         >
-           WORK SO FAR <i className='far fa-play-circle' />
+           GIVE HELP <i className='far fa-play-circle' />
         </Button>
       </div>
     </div>

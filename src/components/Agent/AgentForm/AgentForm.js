@@ -45,7 +45,7 @@ const AgentForm = (props) => {
         <div class="form-container">
             <div class="form">
                 <div class="heading">
-                    <h2>Overhead Chagres Form</h2>
+                    <h2>Overhead Charges Form</h2>
                 </div>
 
                 <div class="form-wrap">
@@ -61,9 +61,12 @@ const AgentForm = (props) => {
                         <input type="number" value={userInput.charges} onChange={handleInput} name="charges" id="charges" required/>
                     </div>
                 </div>
-                    <ImageCropper 
-                        uploadFile={image => {setFile(image)}}
-                    />
+                <div class="form-wrap">
+                    <div class="form-item">
+                        <label>Please upload the picture of Mended item</label>
+                        <ImageCropper uploadFile={image => {setFile(image)}}/>
+                   </div>
+                </div>
                 <br/>
 
                 <div class="btn">

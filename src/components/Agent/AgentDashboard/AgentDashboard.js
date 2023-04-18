@@ -26,24 +26,29 @@ const AgentDashboard = () => {
     const [collectorID,setCollectorID] = useState(localStorage.getItem('user'));
     const [agentData, setAgentData] = useState({});
     const [tabView, setTabView] = useState("Dashboard");
+    const [stats, setStats] = useState({});
 
     useEffect(() => {
         const timer = setTimeout(async () => {
+            const response = await axios.get('/donator/size');
+            setStats(response.data.sizes);
             const resAgent = await axios.post('/collector/get',{collectorID: collectorID});
-            console.log(resAgent);
+            //console.log(resAgent);
             setAgentData(resAgent.data.collector);
-            const response = await axios.post('/collector/assignedItems',{collectorID: collectorID});
-            console.log(response);
-            setAssignedTasks(response.data.assignedItems);
+            const resAssigned = await axios.post('/collector/assignedItems',{collectorID: collectorID});
+            //console.log(response);
+            setAssignedTasks(resAssigned.data.assignedItems);
         },500);
         return () => {clearTimeout(timer);};
     }, []);
 
     useEffect(() => {
         const timer = setTimeout(async () => {
-            const response = await axios.post('/collector/assignedItems',{collectorID: collectorID});
-            console.log(response);
-            setAssignedTasks(response.data.assignedItems);
+            const response = await axios.get('/donator/size');
+            setStats(response.data.sizes);
+            const resAssigned = await axios.post('/collector/assignedItems',{collectorID: collectorID});
+            //console.log(response);
+            setAssignedTasks(resAssigned.data.assignedItems);
         },500);
         return () => {clearTimeout(timer);};
     }, [type]);
@@ -77,10 +82,7 @@ const AgentDashboard = () => {
         navigate("/home");
     }
    
-    const [donorNumber,setDonorNumber] = useState("1023");
-    const [donationNumber,setDonationNumber] = useState("2023");
-    const [regionCount,setRegionCount] = useState("23");
-    const [volunteerCount,setVolunteerCount] = useState("23");
+    const [regionCount,setRegionCount] = useState("4");
 
     const agentDashboard =
         <>
@@ -96,13 +98,13 @@ const AgentDashboard = () => {
     <div class="container">
         <div class="header">
             <div class="nav">
-                <div class="search">
+                {/* <div class="search">
                     <input type="text" placeholder="Search.."/>
                     <button type="submit"><img src={search} alt=""/></button>
-                </div>
+                </div> */}
                 <div class="user">
                     <a href="#" class="btn" onClick={(event) => handleLogout(event)}>Log Out</a>
-                    <img src={notifs} alt=""/>
+                    {/* <img src={notifs} alt=""/> */}
                     <div class="img-case">
                         <img src={user} alt=""/> 
                     </div>
@@ -113,7 +115,7 @@ const AgentDashboard = () => {
             <div class="cards">
                 <div class="card">
                     <div class="box">
-                        <h1>{donationNumber}</h1>
+                        <h1>{stats.itemSize}</h1>
                         <h3>Donations</h3>
                     </div>
                     <div class="icon-case">
@@ -122,7 +124,7 @@ const AgentDashboard = () => {
                 </div>
                 <div class="card">
                     <div class="box">
-                        <h1>{donorNumber}</h1>
+                        <h1>{stats.donatorSize}</h1>
                         <h3>Notable Donors</h3>
                     </div>
                     <div class="icon-case">
@@ -140,7 +142,7 @@ const AgentDashboard = () => {
                 </div>
                 <div class="card">
                     <div class="box">
-                        <h1>{volunteerCount}</h1>
+                        <h1>{stats.collectorSize}</h1>
                         <h3>Volunteers</h3>
                     </div>
                     <div class="icon-case">

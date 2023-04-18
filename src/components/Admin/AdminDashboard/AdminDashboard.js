@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import AuthContext from '../../../store/context/auth';
 import { logout } from '../../Auth/Utility';
 
-const AdminDashboard = () => {
+const AdminDashboard = (props) => {
     
     const navigate = useNavigate();
     const {state: authState, dispatch: authDispatch} = useContext(AuthContext);
@@ -22,14 +22,18 @@ const AdminDashboard = () => {
     const [updateComponent, setUpdateComponent] = useState(false);
     const [agentRequest, setAgentRequests] = useState([]);
     const [tabView, setTabView] = useState("Admin");
+    const [stats, setStats] = useState({});
 
     useEffect(() => {
         const timer = setTimeout(async () => {
+            const response = await axios.get('/donator/size');
+            setStats(response.data.sizes);
+            //console.log(response);
             const resDonatedItems = await axios.post('/items/',{page:1,limit:100});
-            console.log(resDonatedItems);
+            //console.log(resDonatedItems);
             setDonatedItems(resDonatedItems.data.products);
             const resAgentRequests = await axios.post('/admin/requests',{page:1,limit:100});
-            console.log(resAgentRequests);
+            //console.log(resAgentRequests);
             setAgentRequests(resAgentRequests.data.allRequests);
         },500);
         return () => {clearTimeout(timer);};
@@ -60,7 +64,7 @@ const AdminDashboard = () => {
 
     const [donorNumber,setDonorNumber] = useState("1023");
     const [donationNumber,setDonationNumber] = useState("2023");
-    const [regionCount,setRegionCount] = useState("23");
+    const [regionCount,setRegionCount] = useState("4");
     const [volunteerCount,setVolunteerCount] = useState("23");
 
     return(
@@ -73,8 +77,8 @@ const AdminDashboard = () => {
             <a href="#" onClick={(e)=>handleChange(e,'Admin')}><li className={tabView=='Admin'?'highlight':''}><img src={img1} alt=""/>&nbsp; <span>Dashboard</span></li></a>
             <a href="./Donor" onClick={(e)=>handleChange(e,'Donor')}><li className={tabView=='Donor'?'highlight':''}><img src={img1} alt=""/>&nbsp; <span></span>Donors</li></a>
             <a href="./Agent" onClick={(e)=>handleChange(e,'Agent')}><li className={tabView=='Agent'?'highlight':''}><img src={img1} alt=""/>&nbsp; <span></span>Agent</li></a>
-            <li><img src={img1} alt=""/>&nbsp; <span></span>Regions</li>
-            <li><img src={img1} alt=""/>&nbsp; <span></span>Categories</li>
+            {/* <li><img src={img1} alt=""/>&nbsp; <span></span>Regions</li>
+            <li><img src={img1} alt=""/>&nbsp; <span></span>Categories</li> */}
             {/* <li><img src={img1} alt=""/>&nbsp; <span></span>Help-desk</li>
             <li><img src={img1} alt=""/>&nbsp; <span></span>Settings</li> */}
         </ul>
@@ -82,13 +86,13 @@ const AdminDashboard = () => {
     <div class="container">
         <div class="header">
             <div class="nav">
-                <div class="search">
+                {/* <div class="search">
                     <input type="text" placeholder="Search.."/>
                     <button type="submit"><img src={search} alt=""/></button>
-                </div>
+                </div> */}
                 <div class="user">
                     <a href="#" class="btn" onClick={(event) => handleLogout(event)}>Log Out</a>
-                    <img src={notifs} alt=""/>
+                    {/* <img src={notifs} alt=""/> */}
                     <div class="img-case">
                         <img src={user} alt=""/> 
                     </div>
@@ -99,7 +103,7 @@ const AdminDashboard = () => {
             <div class="cards">
                 <div class="card">
                     <div class="box">
-                        <h1>{donationNumber}</h1>
+                        <h1>{stats.itemSize}</h1>
                         <h3>Donations</h3>
                     </div>
                     <div class="icon-case">
@@ -108,7 +112,7 @@ const AdminDashboard = () => {
                 </div>
                 <div class="card">
                     <div class="box">
-                        <h1>{donorNumber}</h1>
+                        <h1>{stats.donatorSize}</h1>
                         <h3>Notable Donors</h3>
                     </div>
                     <div class="icon-case">
@@ -126,7 +130,7 @@ const AdminDashboard = () => {
                 </div>
                 <div class="card">
                     <div class="box">
-                        <h1>{volunteerCount}</h1>
+                        <h1>{stats.collectorSize}</h1>
                         <h3>Volunteers</h3>
                     </div>
                     <div class="icon-case">

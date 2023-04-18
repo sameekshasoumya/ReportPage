@@ -67,15 +67,13 @@ const PickUpForm = (props) => {
                     </div>
                 </div>
 
-                {/* <div class="form-wrap">
+                <div class="form-wrap">
                     <div class="form-item">
                         <label>Please upload the condition of item</label>
-                        <input type="file" value={userInput.file} onChange={handleInput} name="file" id="file" required/>
-                    </div>
-                </div> */}
-                <ImageCropper 
-                        uploadFile={image => {setFile(image)}}
-                    />
+                        <ImageCropper uploadFile={image => {setFile(image)}}/>
+                   </div>
+                </div>
+                
                 <br/>
 
                 <div class="btn">

@@ -45,7 +45,7 @@ const DeliveryForm = (props) => {
                 <div class="form-wrap">
                     <div class="form-item">
                         <label htmlFor="id">Consignment ID</label>
-                        <p>{props.itemId}</p>
+                        <p>{props.itemID}</p>
                     </div>
                 </div>
 

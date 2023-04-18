@@ -21,14 +21,17 @@ const DonorDashboard = () => {
     const [tabView, setTabView] = useState("Dashboard");
     const [displayDashboard, setDisplayDashboard] = useState(true);
     const [donatorID,setDonatorID] = useState(localStorage.getItem('user'));
+    const [stats, setStats] = useState({});
 
     useEffect(() => {
         const timer = setTimeout(async () => {
+            const response = await axios.get('/donator/size');
+            setStats(response.data.sizes);
             const resDonator = await axios.post('/donator/get',{donatorID: donatorID});
-            console.log(resDonator);
+            //console.log(resDonator);
             setDonator(resDonator.data.donator);
             const resDonatedItems = await axios.post('/donator/items',{donatorID:donatorID});
-            console.log(resDonatedItems);
+            //console.log(resDonatedItems);
             setDonatedItems(resDonatedItems.data.donatedItems);
 
         },500);
@@ -37,6 +40,8 @@ const DonorDashboard = () => {
 
     useEffect(() => {
         const timer = setTimeout(async () => {
+            const response = await axios.get('/donator/size');
+            setStats(response.data.sizes);
             const resDonatedItems = await axios.post('/donator/items',{donatorID:donatorID});
             console.log(resDonatedItems);
             setDonatedItems(resDonatedItems.data.donatedItems);
@@ -62,11 +67,8 @@ const DonorDashboard = () => {
         navigate("/home");
     }
  
-    const [donorNumber,setDonorNumber] = useState("1023");
-    const [donationNumber,setDonationNumber] = useState("2023");
-    const [regionCount,setRegionCount] = useState("23");
-    const [volunteerCount,setVolunteerCount] = useState("23");
-
+    const [regionCount,setRegionCount] = useState("4");
+    
     const donorDashboard = 
         <>
             <div class="side-menu">
@@ -75,20 +77,20 @@ const DonorDashboard = () => {
         </div>
         <ul>
             <a href="#" onClick={(e)=>handleChange(e,'Dashboard')}><li className={tabView=='Dashboard'?'highlight':''}><img src={img1} alt=""/>&nbsp; <span>Dashboard</span></li></a>
-            <li><img src={img1} alt=""/>&nbsp; <span></span>Help-desk</li>
-            <li><img src={img1} alt=""/>&nbsp; <span></span>Settings</li>
+            {/* <li><img src={img1} alt=""/>&nbsp; <span></span>Help-desk</li>
+            <li><img src={img1} alt=""/>&nbsp; <span></span>Settings</li> */}
         </ul>
     </div>
     <div class="container">
         <div class="header">
             <div class="nav">
-                <div class="search">
+                {/* <div class="search">
                     <input type="text" placeholder="Search.."/>
                     <button type="submit"><img src={search} alt=""/></button>
-                </div>
+                </div> */}
                 <div class="user">
                     <a href="/" class="btn" onClick={(event) => handleLogout(event)}>Log Out</a>
-                    <img src={notifs} alt=""/>
+                    {/* <img src={notifs} alt=""/> */}
                     <div class="img-case">
                         <img src={user} alt=""/> 
                     </div>
@@ -99,7 +101,7 @@ const DonorDashboard = () => {
             <div class="cards">
                 <div class="card">
                     <div class="box">
-                        <h1>{donationNumber}</h1>
+                        <h1>{stats.itemSize}</h1>
                         <h3>Donations</h3>
                     </div>
                     <div class="icon-case">
@@ -108,7 +110,7 @@ const DonorDashboard = () => {
                 </div>
                 <div class="card">
                     <div class="box">
-                        <h1>{donorNumber}</h1>
+                        <h1>{stats.donatorSize}</h1>
                         <h3>Notable Donors</h3>
                     </div>
                     <div class="icon-case">
@@ -126,7 +128,7 @@ const DonorDashboard = () => {
                 </div>
                 <div class="card">
                     <div class="box">
-                        <h1>{volunteerCount}</h1>
+                        <h1>{stats.collectorSize}</h1>
                         <h3>Volunteers</h3>
                     </div>
                     <div class="icon-case">
