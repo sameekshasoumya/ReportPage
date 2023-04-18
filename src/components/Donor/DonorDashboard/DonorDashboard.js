@@ -144,6 +144,7 @@ const DonorDashboard = () => {
                         <th>Name</th>
                         <th>Region</th>
                         <th>Category</th>
+                        <th>Agent's Name</th>
                         <th>Agent's Contact</th>
                         <th>Status</th>
                     </tr>
@@ -154,7 +155,8 @@ const DonorDashboard = () => {
                                     <td>{items.name}</td>
                                     <td>{items.region}</td>
                                     <td>{items.category}</td>
-                                    <td>{items.collId}</td>
+                                    <td>{items.collectorName}</td>
+                                    <td>{items.collectorContact}</td>
                                     <td>
                                         {(items.status=='Unpaid'||items.status=='Paid')&&
                                             <a class="btn">Delivered</a>}

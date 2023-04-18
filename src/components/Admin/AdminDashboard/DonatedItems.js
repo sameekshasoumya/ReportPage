@@ -37,7 +37,7 @@ const DonatedItems = (props) => {
                                     <td>{item.name}</td>
                                     <td>{item.region}</td>
                                     <td>{item.category}</td>
-                                    <td>{item.collId}</td>
+                                    <td>{item.collectorName}</td>
                                     <td>
                                         {item.status=='Delivered'&&
                                             <a href="#" class="btn" onClick={(e)=>handlePayment(e,item._id)}>Pay</a>}

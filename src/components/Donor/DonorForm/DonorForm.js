@@ -4,7 +4,7 @@ import ImageCropper from '../../Agent/AgentForm/ImageCropper';
 import axios from '../../../axios';
 
 const upload = async (file, event, userInput, donorID, setDisplayDashboard) => {
-    console.log(file);
+    console.log(donorID);
     const formData = new FormData();
     formData.append('file', file);
     formData.append('donID', donorID);

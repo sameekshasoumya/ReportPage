@@ -15,10 +15,6 @@ import AuthContext from '../../../store/context/auth';
 import { logout } from '../../Auth/Utility';
 
 const AdminDashboard = () => {
-
-    const shoot = () => {
-        alert("You're logged out!");
-    }
     
     const navigate = useNavigate();
     const {state: authState, dispatch: authDispatch} = useContext(AuthContext);

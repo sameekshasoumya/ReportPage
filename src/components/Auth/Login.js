@@ -28,9 +28,9 @@ const Login = () => {
             const response = await axios.post("/admin/adlogin",data);
             if(response.status == 200){
                 console.log(response);
-                dispatch(actions.authSuccess(response.data.user._id));
                 localStorage.setItem('auth', true);
                 localStorage.setItem('type', 'Admin');
+                await dispatch(actions.authSuccess(response.data.user._id));
                 navigate("/adminDashboard");
             }
             else{
@@ -56,9 +56,9 @@ const Login = () => {
             const response = await axios.post("/auth/login",data);
             if(response.status == 200){
                 console.log(response);
-                dispatch(actions.authSuccess(response.data.user._id));
                 localStorage.setItem('auth', true);
                 localStorage.setItem('type', userInput.category);
+                await dispatch(actions.authSuccess(response.data.user._id));
                 navigate(navigatePath);
             }
             else{

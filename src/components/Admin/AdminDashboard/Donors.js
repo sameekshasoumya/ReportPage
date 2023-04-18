@@ -26,7 +26,7 @@ const Donors = (props) => {
                         <th>Mobile</th>
                         <th>Email</th>
                         <th>Region</th>
-                        <th>Item's Donated</th>
+                        <th>Items Donated</th>
                     </tr>
                     {
                         donorsData.map((donor)=>{

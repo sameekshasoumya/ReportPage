@@ -156,6 +156,7 @@ const AgentDashboard = () => {
                 <table>
                     <tr>
                         <th>Donor Name</th>
+                        <th> Donor Contact</th>
                         <th>Region</th>
                         <th>Item</th>
                         <th>Category</th>
@@ -166,6 +167,7 @@ const AgentDashboard = () => {
                             return(
                                 <tr key={task._id}>
                                     <td>{task.donorName}</td>
+                                    <td>{task.donorContact}</td>
                                     <td>{task.region}</td>
                                     <td>{task.name}</td>
                                     <td>{task.category}</td>
@@ -187,7 +189,7 @@ const AgentDashboard = () => {
                     }
                 </table>
                 </div>
-                <div class="new-students">
+                {/* <div class="new-students">
                     <div class="title">
                         <h2>Charge settlement</h2>
                         <a href="#" class="btn">Form</a>
@@ -197,7 +199,7 @@ const AgentDashboard = () => {
                         <td>Form for overhead charges of completed pickups</td>                           
                         </tr>
                     </table>
-                </div>
+                </div> */}
             </div>
         </div>
     </div>
