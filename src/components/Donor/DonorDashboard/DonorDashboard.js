@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import img1 from './settings.png';
 import donate from './income.png';
 import search from './search.png';
@@ -8,39 +8,26 @@ import info from './info.png';
 import './DonorDashboard.css';
 import axios from '../../../axios';
 import DonorForm from '../DonorForm/DonorForm';
+import { logout } from '../../Auth/Utility';
+import AuthContext from '../../../store/context/auth';
+import { useNavigate } from 'react-router-dom';
 
 const DonorDashboard = () => {
 
-    const shoot = () => {
-        alert("You're logged out!");
-    }
-    
-    const [data,setData] = useState([
-        {
-            name:"Books",
-            region:"Dhanbad",
-            category:"Non Perishabe item",
-            agent:{
-                name:"Raj",
-                contact:"91234567890",
-            },
-            status:"Assigned"
-        }
-    ]);
-
+    const navigate = useNavigate();
+    const {state: authState, dispatch: authDispatch} = useContext(AuthContext);
     const [donator, setDonator] = useState({});
     const [donatedItems, setDonatedItems] = useState([]);
     const [tabView, setTabView] = useState("Dashboard");
     const [displayDashboard, setDisplayDashboard] = useState(true);
-    const [donatorID,setDonatorID] = useState(localStorage.getItem('donatorID'));
-    const donorID = "64260e700667c58853f69e60"; //Remove after login and change everywhere to donatorID
+    const [donatorID,setDonatorID] = useState(localStorage.getItem('user'));
 
     useEffect(() => {
         const timer = setTimeout(async () => {
-            const resDonator = await axios.post('/donator/get',{donatorID: donorID});
+            const resDonator = await axios.post('/donator/get',{donatorID: donatorID});
             console.log(resDonator);
             setDonator(resDonator.data.donator);
-            const resDonatedItems = await axios.post('/donator/items',{donatorID:donorID});
+            const resDonatedItems = await axios.post('/donator/items',{donatorID:donatorID});
             console.log(resDonatedItems);
             setDonatedItems(resDonatedItems.data.donatedItems);
 
@@ -50,7 +37,7 @@ const DonorDashboard = () => {
 
     useEffect(() => {
         const timer = setTimeout(async () => {
-            const resDonatedItems = await axios.post('/donator/items',{donatorID:donorID});
+            const resDonatedItems = await axios.post('/donator/items',{donatorID:donatorID});
             console.log(resDonatedItems);
             setDonatedItems(resDonatedItems.data.donatedItems);
 
@@ -70,8 +57,11 @@ const DonorDashboard = () => {
         setTabView(view);
     }
 
-    const [here,setHere] = useState("FORM"); 
-    const [userName,setUserName] = useState("Donor XYZ"); 
+    const handleLogout = (event) => {
+        logout(event, authDispatch);
+        navigate("/home");
+    }
+ 
     const [donorNumber,setDonorNumber] = useState("1023");
     const [donationNumber,setDonationNumber] = useState("2023");
     const [regionCount,setRegionCount] = useState("23");
@@ -97,7 +87,7 @@ const DonorDashboard = () => {
                     <button type="submit"><img src={search} alt=""/></button>
                 </div>
                 <div class="user">
-                    <a href="#" class="btn" onClick={shoot}>Log Out</a>
+                    <a href="/" class="btn" onClick={(event) => handleLogout(event)}>Log Out</a>
                     <img src={notifs} alt=""/>
                     <div class="img-case">
                         <img src={user} alt=""/> 
@@ -196,7 +186,7 @@ const DonorDashboard = () => {
     if(displayDashboard)
         return donorDashboard;
     else
-        return <DonorForm donorID={donorID} setDisplayDashboard={setDisplayDashboard} />
+        return <DonorForm donorID={donatorID} setDisplayDashboard={setDisplayDashboard} />
 
 }
 

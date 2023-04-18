@@ -2,19 +2,33 @@ import React from 'react';
 import '../../App.css';
 import './ConnectPage.css';
 import { Button } from './Button';
+import { useNavigate } from 'react-router-dom';
 
-function ConnectPage() {
+const ConnectPage = () => {
+
+  const navigate = useNavigate();
+
+  const handleSignup = (e) => {
+    e.preventDefault();
+    navigate("/register");
+  }
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    navigate("/login");
+  }
+
   return (
     <div className='central'>
         <div
           className='login'
         >
-            <a href='http://localhost:5000/login'>LOGIN</a>
+            <a href='#' onClick={(e)=>handleLogin(e)}>LOGIN</a>
         </div>
         <div
           className='signup'
         >
-           <a href='http://localhost:5000/register'>SIGNUP</a>
+           <a href='#' onClick={(e)=>handleSignup(e)}>SIGNUP</a>
         </div>
     </div>
   );

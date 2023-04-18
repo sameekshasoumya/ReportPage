@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import { BrowserRouter ,Routes ,Route, Navigate } from 'react-router-dom';
 import './App.css';
-import Auth from "./components/auth";
 import DonorDashboard from "./components/Donor/DonorDashboard/DonorDashboard";
 import DonorForm from "./components/Donor/DonorForm/DonorForm";
 import AgentForm from "./components/Agent/AgentForm/AgentForm";
@@ -13,20 +12,22 @@ import Products from "./components/Home/pages/Products";
 import SignUp from "./components/Home/pages/SignUp";
 import PickUpForm from "./components/Agent/AgentForm/PickUpForm";
 import DeliveryForm from "./components/Agent/AgentForm/DeliveryForm";
-import Agents from "./components/Admin/AdminDashboard/Agents";
-import Donors from "./components/Admin/AdminDashboard/Donors";
+import Register from "./components/Auth/Register";
+import Login from "./components/Auth/Login";
+import AuthContext from "./store/context/auth";
 
 const App = (props) => {
 
+  const {state} = useContext(AuthContext);
 
     return(
-      <BrowserRouter>
         <Routes>
           <Route path="/home" element={<Home/>} />
           <Route path="/services" element={<Services/>} />
           <Route path="/products" element={<Products/>} />
           <Route path="/sign-up" element={<SignUp/>} />
-          <Route path="/auth" element={<Auth />} />
+          <Route path="/register" element={<Register/>} />
+          <Route path="/login" element={<Login/>} />
           <Route path="/donorDashboard" element={<DonorDashboard />} />
           <Route path="/donorForm" element={<DonorForm />} />
           <Route path="/agentForm" element={<AgentForm />} />
@@ -36,7 +37,6 @@ const App = (props) => {
           <Route path="/deliveryForm" element={<DeliveryForm />} />
           <Route path="/" element={<Navigate replace to="/home" />} />
         </Routes>
-      </BrowserRouter>
     );
 }
 

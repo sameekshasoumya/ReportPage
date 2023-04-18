@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import img1 from './settings.png';
 import donate from './income.png';
 import search from './search.png';
@@ -10,6 +10,9 @@ import axios from '../../../axios';
 import DonatedItems from './DonatedItems';
 import Agents from './Agents';
 import Donors from './Donors';
+import { useNavigate } from 'react-router-dom';
+import AuthContext from '../../../store/context/auth';
+import { logout } from '../../Auth/Utility';
 
 const AdminDashboard = () => {
 
@@ -17,24 +20,8 @@ const AdminDashboard = () => {
         alert("You're logged out!");
     }
     
-    const data = [
-        {
-            name: "Books",
-            region: "Dhanbad",
-            category: "Stationery",
-            agent:"Suresh",
-            status: "Assigned"
-        }
-    ];
-
-    const agent = [
-        {
-            name: "Ramesh",
-            region: "Dhanbad",
-            contact: "91234567890"
-        }
-    ];
-
+    const navigate = useNavigate();
+    const {state: authState, dispatch: authDispatch} = useContext(AuthContext);
     const [donatedItems,setDonatedItems] = useState([]);
     const [updateComponent, setUpdateComponent] = useState(false);
     const [agentRequest, setAgentRequests] = useState([]);
@@ -70,8 +57,11 @@ const AdminDashboard = () => {
         setTabView(view);
     }
 
-    const [here,setHere] = useState("Approve");
-    const [current,setCurrent] = useState("Accept All");
+    const handleLogout = (event) => {
+        logout(event, authDispatch);
+        navigate("/home");
+    }
+
     const [donorNumber,setDonorNumber] = useState("1023");
     const [donationNumber,setDonationNumber] = useState("2023");
     const [regionCount,setRegionCount] = useState("23");
@@ -101,7 +91,7 @@ const AdminDashboard = () => {
                     <button type="submit"><img src={search} alt=""/></button>
                 </div>
                 <div class="user">
-                    <a href="#" class="btn" onClick={shoot}>Log Out</a>
+                    <a href="#" class="btn" onClick={(event) => handleLogout(event)}>Log Out</a>
                     <img src={notifs} alt=""/>
                     <div class="img-case">
                         <img src={user} alt=""/> 

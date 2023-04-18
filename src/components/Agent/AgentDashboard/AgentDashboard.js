@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import img1 from './settings.png';
 import donate from './income.png';
 import search from './search.png';
@@ -12,36 +12,27 @@ import axios from '../../../axios';
 import PickUpForm from '../AgentForm/PickUpForm';
 import DeliveryForm from '../AgentForm/DeliveryForm';
 import UpdateProfileForm from '../AgentForm/UpdateProfile';
+import { logout } from '../../Auth/Utility';
+import AuthContext from '../../../store/context/auth';
 
 const AgentDashboard = () => {
 
-    const shoot = () => {
-        alert("You're logged out!");
-    }
-
-    const data = [
-        {
-            donorName: "Ramesh",
-            address: "Dhanbad",
-            item: "Books",
-            status: "Pick-Up"
-        }
-    ];
-
+    const navigate = useNavigate();
+    const {state: authState, dispatch: authDispatch} = useContext(AuthContext);
     const [itemID,setItemID] = useState(null); 
     const [displayDashboard, setDisplayDashboard] = useState(true);
     const [assignedTasks, setAssignedTasks] = useState([]);
     const [type,setType] = useState("");
-    const [collectorID,setCollectorID] = useState(localStorage.getItem('collectorID'));
+    const [collectorID,setCollectorID] = useState(localStorage.getItem('user'));
     const [agentData, setAgentData] = useState({});
     const [tabView, setTabView] = useState("Dashboard");
 
     useEffect(() => {
         const timer = setTimeout(async () => {
-            const resAgent = await axios.post('/collector/get',{collectorID:"643aa4db0008520bfd7a07ba"});
+            const resAgent = await axios.post('/collector/get',{collectorID: collectorID});
             console.log(resAgent);
             setAgentData(resAgent.data.collector);
-            const response = await axios.post('/collector/assignedItems',{collectorID:"643aa4db0008520bfd7a07ba"});
+            const response = await axios.post('/collector/assignedItems',{collectorID: collectorID});
             console.log(response);
             setAssignedTasks(response.data.assignedItems);
         },500);
@@ -50,7 +41,7 @@ const AgentDashboard = () => {
 
     useEffect(() => {
         const timer = setTimeout(async () => {
-            const response = await axios.post('/collector/assignedItems',{collectorID:"643aa4db0008520bfd7a07ba"});
+            const response = await axios.post('/collector/assignedItems',{collectorID: collectorID});
             console.log(response);
             setAssignedTasks(response.data.assignedItems);
         },500);
@@ -80,9 +71,12 @@ const AgentDashboard = () => {
         e.preventDefault();
         setTabView(view);
     }
+
+    const handleLogout = (event) => {
+        logout(event, authDispatch);
+        navigate("/home");
+    }
    
-    const [here,setHere] = useState("FORM"); 
-    const [userName,setUserName] = useState("Agent : ABC"); 
     const [donorNumber,setDonorNumber] = useState("1023");
     const [donationNumber,setDonationNumber] = useState("2023");
     const [regionCount,setRegionCount] = useState("23");
@@ -107,7 +101,7 @@ const AgentDashboard = () => {
                     <button type="submit"><img src={search} alt=""/></button>
                 </div>
                 <div class="user">
-                    <a href="#" class="btn" onClick={shoot}>Log Out</a>
+                    <a href="#" class="btn" onClick={(event) => handleLogout(event)}>Log Out</a>
                     <img src={notifs} alt=""/>
                     <div class="img-case">
                         <img src={user} alt=""/> 
@@ -196,7 +190,7 @@ const AgentDashboard = () => {
                 <div class="new-students">
                     <div class="title">
                         <h2>Charge settlement</h2>
-                        <a href="#" class="btn">{here}</a>
+                        <a href="#" class="btn">Form</a>
                     </div>
                     <table>
                         <tr>
