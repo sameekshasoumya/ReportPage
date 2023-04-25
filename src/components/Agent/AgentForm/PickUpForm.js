@@ -39,18 +39,6 @@ const PickUpForm = (props) => {
         // props.setDisplayDashboard(true);
     }
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const response = await axios.post('/collector/itemCollect',userInput);
-        props.setType("");
-        if(response.status == 200){
-            props.setDisplayDashboard(true);
-        }
-        else{
-            alert(response.message);
-        }
-    }
-
     return(
         <>
             <div class="wrapper">
@@ -60,12 +48,12 @@ const PickUpForm = (props) => {
                     <h2>Pick Up Form</h2>
                 </div>
 
-                <div class="form-wrap">
+                {/* <div class="form-wrap">
                     <div class="form-item">
                         <label htmlFor="id">Consignment ID</label>
                         <p>{props.itemID}</p>
                     </div>
-                </div>
+                </div> */}
 
                 <div class="form-wrap">
                     <div class="form-item">

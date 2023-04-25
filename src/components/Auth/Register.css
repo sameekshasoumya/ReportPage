@@ -83,6 +83,7 @@ body{
     border-radius: 3px;
 }
 
+.form-item input[type="password"],
 .form-item input[type="number"],
 .form-item select{
     width: 100%;

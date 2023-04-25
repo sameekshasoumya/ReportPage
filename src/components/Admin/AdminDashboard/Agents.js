@@ -5,6 +5,7 @@ import './AdminDashboard.css';
 const Agents = (props) => {
 
     const [agentsData, setAgentsData] = useState([]);
+    const [refresh, setRefresh] = useState(false);
 
     useEffect(() => {
         const timer = setTimeout(async () => {
@@ -13,7 +14,23 @@ const Agents = (props) => {
             setAgentsData(response.data.allCollectors);
         },500);
         return () => {clearTimeout(timer);};
-    }, []);
+    }, [refresh]);
+
+    const handleRemove = async (e,id) =>{
+        e.preventDefault();
+        console.log(id);
+        try{
+            const response = await axios.post('/collector/delete',{ collectorID: id});
+            //console.log(response);
+            setRefresh(prevState=>{
+                return !prevState;
+            });
+            alert(response.data.message);
+        }
+        catch(err){
+            alert(err.response.data.message);
+        }
+    }
 
     return(
         <div class="recent-payments">
@@ -37,6 +54,7 @@ const Agents = (props) => {
                                     <td>{agent.email}</td>
                                     <td>{agent.region}</td>
                                     <td>{agent.items.length}</td>
+                                    <td><a href="#" class="btn" onClick={(e)=>handleRemove(e,agent._id)}>Remove</a></td>
                                 </tr> 
                             );
                         })

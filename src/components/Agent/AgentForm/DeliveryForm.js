@@ -23,6 +23,10 @@ const DeliveryForm = (props) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if(userInput.name==""||userInput.aadhar==""||userInput.address==""){
+            alert('Please fill all the fields');
+            return;
+        }
         const response = await axios.post('/collector/itemDeliver',userInput);
         props.setType("");
         if(response.status == 200){
@@ -42,12 +46,12 @@ const DeliveryForm = (props) => {
                     <h2>Delivery Form</h2>
                 </div>
 
-                <div class="form-wrap">
+                {/* <div class="form-wrap">
                     <div class="form-item">
                         <label htmlFor="id">Consignment ID</label>
                         <p>{props.itemID}</p>
                     </div>
-                </div>
+                </div> */}
 
                 <div class="form-wrap">
                     <div class="form-item">

@@ -8,7 +8,7 @@ const Register = () => {
     const navigate = useNavigate();
 
     const regions = ["Region-1","Region-2","Region-3","Region-4","Region-5"];
-    const category = ["Donator","Collector"];
+    const category = ["Donator","Agent"];
 
     const [userInput,setUserInput] = useState({
         userfirstname: "",
@@ -30,6 +30,10 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if(userInput.userfirstname==""||userInput.email==""||userInput.aadhar==""||userInput.password==""||userInput.mobile==""){
+            alert('Please fill all the fields');
+            return;
+        }
         const cat = userInput.category == 'Donator' ? 0 : 1;
         const name = userInput.userfirstname + " "+ userInput.userlastname;
         try{
@@ -131,7 +135,7 @@ const Register = () => {
                 <div class="form-wrap">
                     <div class="form-item">
                         <label htmlFor="password">Password</label>
-                        <input type="text" value={userInput.password} onChange={handleInput} name="password" id="password" required/>
+                        <input type="password" value={userInput.password} onChange={handleInput} name="password" id="password" required/>
                     </div>
                 </div>
 

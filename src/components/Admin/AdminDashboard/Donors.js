@@ -25,7 +25,7 @@ const Donors = (props) => {
                         <th>Name</th>
                         <th>Mobile</th>
                         <th>Email</th>
-                        <th>Region</th>
+                        {/* <th>Region</th> */}
                         <th>Items Donated</th>
                     </tr>
                     {
@@ -35,7 +35,7 @@ const Donors = (props) => {
                                     <td>{donor.name}</td>
                                     <td>{donor.mobile}</td>
                                     <td>{donor.email}</td>
-                                    <td>{donor.region}</td>
+                                    {/* <td>{donor.region}</td> */}
                                     <td>{donor.items.length}</td>
                                 </tr> 
                             );

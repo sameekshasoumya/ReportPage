@@ -89,7 +89,7 @@ class ImageCropper extends PureComponent {
     return (
       <div className="App">
         <div>
-          <input className="form-control" type="file" accept="image/*" onChange={this.onSelectFile} />
+          <input className="form-control" type="file" accept="image/*" onChange={this.onSelectFile} required/>
         </div>
         {src && (
           <ReactCrop

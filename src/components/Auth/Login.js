@@ -9,7 +9,7 @@ const Login = () => {
 
     const navigate = useNavigate();
     const {state, dispatch} = useContext(authContext);
-    const category = ["Donator","Collector","Admin"];
+    const category = ["Donator","Agent","Admin"];
     const [userInput,setUserInput] = useState({
         email: "",
         password: "",
@@ -107,7 +107,7 @@ const Login = () => {
                 <div class="form-wrap">
                     <div class="form-item">
                         <label htmlFor="password">Password</label>
-                        <input type="text" value={userInput.password} onChange={handleInput} name="password" id="password" required/>
+                        <input type="password" value={userInput.password} onChange={handleInput} name="password" id="password" required/>
                     </div>
                 </div>
 

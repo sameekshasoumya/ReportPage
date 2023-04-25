@@ -48,12 +48,12 @@ const AgentForm = (props) => {
                     <h2>Overhead Charges Form</h2>
                 </div>
 
-                <div class="form-wrap">
+                {/* <div class="form-wrap">
                     <div class="form-item">
                         <label htmlFor="id">Consignment ID</label>
                         <p>{props.itemID}</p> 
                     </div>
-                </div>
+                </div> */}
 
                 <div class="form-wrap">
                     <div class="form-item">

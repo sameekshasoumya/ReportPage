@@ -40,12 +40,12 @@ const UpdateProfileForm = (props) => {
                     <h2>Update Profile</h2>
                 </div>
 
-                <div class="form-wrap">
+                {/* <div class="form-wrap">
                     <div class="form-item">
                         <label htmlFor="id">Collector ID</label>
                         <p>{props.collectorID}</p>
                     </div>
-                </div>
+                </div> */}
 
                 <div class="form-wrap">
                     <div class="form-item">
@@ -57,7 +57,7 @@ const UpdateProfileForm = (props) => {
                 <div class="form-wrap">
                     <div class="form-item">
                         <label htmlFor="name">Mobile</label>
-                        <input type="number" value={userInput.mobile} onChange={handleInput} name="mobile" id="mobile" required/>
+                        <input type="number" value={userInput.mobile} onChange={handleInput} name="mobile" id="mobile"/>
                     </div>
                 </div>
 
