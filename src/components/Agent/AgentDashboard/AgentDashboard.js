@@ -159,9 +159,9 @@ const AgentDashboard = () => {
                     <tr>
                         <th>Donor Name</th>
                         <th> Donor Contact</th>
-                        <th>Region</th>
                         <th>Item</th>
                         <th>Category</th>
+                        <th>Region</th>
                         <th>Action</th>
                     </tr>
                     {
@@ -170,9 +170,9 @@ const AgentDashboard = () => {
                                 <tr key={task._id}>
                                     <td>{task.donorName}</td>
                                     <td>{task.donorContact}</td>
-                                    <td>{task.region}</td>
                                     <td>{task.name}</td>
                                     <td>{task.category}</td>
+                                    <td>{task.region}</td>
                                     <td>
                                         {task.status=='Assigned'&&
                                             <a href="./pickUpForm" class="btn" onClick={(e)=>handleAgentForm(e,task,"Pick Up")}>Pick Up</a>}

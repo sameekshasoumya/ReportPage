@@ -37,8 +37,8 @@ h3{
 .btn:hover{
     color: #f05462;
     background-color: white;
-    padding: 3px 8px;
-    border: 2px solid #f05462;
+    /* padding: 3px 8px; */
+    /* border: 2px solid #f05462; */
 }
 .title{
     display: flex;

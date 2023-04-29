@@ -91,6 +91,7 @@ const DonorDashboard = () => {
                 <div class="user">
                     <a href="/" class="btn" onClick={(event) => handleLogout(event)}>Log Out</a>
                     {/* <img src={notifs} alt=""/> */}
+                    {/* <a href="#" class="btn" onClick={(e)=>handlePickUp(e)}>Request Pickup</a> */}
                     <div class="img-case">
                         <img src={user} alt=""/> 
                     </div>
@@ -143,6 +144,7 @@ const DonorDashboard = () => {
                 </div>
                 <table>
                     <tr>
+                        <th></th>
                         <th>Name</th>
                         <th>Region</th>
                         <th>Category</th>
@@ -154,6 +156,7 @@ const DonorDashboard = () => {
                         donatedItems.map((items)=>{
                             return(
                                 <tr>
+                                    <td><img src={items.url[0]} height="100px" /></td>
                                     <td>{items.name}</td>
                                     <td>{items.region}</td>
                                     <td>{items.category}</td>

@@ -40,20 +40,22 @@ const Agents = (props) => {
                 <table>
                     <tr>
                         <th>Name</th>
+                        <th>Aadhar</th>
                         <th>Mobile</th>
                         <th>Email</th>
                         <th>Region</th>
-                        <th>Item's Assigned</th>
+                        {/* <th>Items Assigned</th> */}
                     </tr>
                     {
                         agentsData.map((agent)=>{
                             return(
                                 <tr key={agent._id}>
                                     <td>{agent.name}</td>
+                                    <td>{agent.aadhar}</td>
                                     <td>{agent.mobile}</td>
                                     <td>{agent.email}</td>
                                     <td>{agent.region}</td>
-                                    <td>{agent.items.length}</td>
+                                    {/* <td>{agent.items.length}</td> */}
                                     <td><a href="#" class="btn" onClick={(e)=>handleRemove(e,agent._id)}>Remove</a></td>
                                 </tr> 
                             );

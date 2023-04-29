@@ -4,12 +4,13 @@ import axios from '../../../axios';
 import ImageCropper from './ImageCropper';
 import 'react-image-crop/dist/ReactCrop.css';
 
-const upload = async (file, event, itemID, charges, setType, setDisplayDashboard) => {
+const upload = async (file, event, itemID, charges, desc, setType, setDisplayDashboard) => {
     console.log(file);
     const formData = new FormData();
     formData.append('file', file);
     formData.append('itemID', itemID);
     formData.append('charges', charges);
+    formData.append('desc', desc);
     event.preventDefault();
     const response = await axios.post('/collector/itemUpdate',formData);
     await setType("");
@@ -27,7 +28,8 @@ const AgentForm = (props) => {
 
     const [userInput,setUserInput] = useState({
         itemID: props.itemID,
-        charges:""
+        charges:"",
+        desc:""
     });
 
     const [file, setFile] = useState(null);
@@ -60,6 +62,10 @@ const AgentForm = (props) => {
                         <label htmlFor="charges">Total Cost incurred</label>
                         <input type="number" value={userInput.charges} onChange={handleInput} name="charges" id="charges" required/>
                     </div>
+                    <div class="form-item">
+                        <label htmlFor="charges">Description(Changes done to the item)</label>
+                        <input type="text" value={userInput.desc} onChange={handleInput} name="desc" id="desc" required/>
+                    </div>
                 </div>
                 <div class="form-wrap">
                     <div class="form-item">
@@ -70,7 +76,7 @@ const AgentForm = (props) => {
                 <br/>
 
                 <div class="btn">
-                    <input type="submit" value="Submit Request" onClick={(event) => upload(file, event, userInput.itemID, userInput.charges, props.setType, props.setDisplayDashboard)}/>
+                    <input type="submit" value="Submit Request" onClick={(event) => upload(file, event, userInput.itemID, userInput.charges, userInput.desc, props.setType, props.setDisplayDashboard)}/>
                 </div>
 
             </div>
