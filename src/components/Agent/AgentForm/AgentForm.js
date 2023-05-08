@@ -62,7 +62,7 @@ const AgentForm = (props) => {
                         <label htmlFor="charges">Total Cost incurred</label>
                         <input type="number" value={userInput.charges} onChange={handleInput} name="charges" id="charges" required/>
                     </div>
-                    <div class="form-item">
+                    <div class="form-item-desc">
                         <label htmlFor="charges">Description(Changes done to the item)</label>
                         <input type="text" value={userInput.desc} onChange={handleInput} name="desc" id="desc" required/>
                     </div>

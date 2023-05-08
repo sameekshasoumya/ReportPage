@@ -32,6 +32,8 @@ const Agents = (props) => {
         }
     }
 
+    const [Textt1,setTextt1] = useState("Download");
+
     return(
         <div class="recent-payments">
                 <div class="title">
@@ -44,6 +46,8 @@ const Agents = (props) => {
                         <th>Mobile</th>
                         <th>Email</th>
                         <th>Region</th>
+                        <th>Action</th>
+                        <th>History</th>
                         {/* <th>Items Assigned</th> */}
                     </tr>
                     {
@@ -57,6 +61,7 @@ const Agents = (props) => {
                                     <td>{agent.region}</td>
                                     {/* <td>{agent.items.length}</td> */}
                                     <td><a href="#" class="btn" onClick={(e)=>handleRemove(e,agent._id)}>Remove</a></td>
+                                    <td><a href="#" class="btn" onClick={()=> setTextt1("Downloaded")}>{Textt1}</a></td>
                                 </tr> 
                             );
                         })

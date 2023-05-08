@@ -6,6 +6,9 @@ const Donors = (props) => {
 
     const [donorsData, setDonorsData] = useState([]);
 
+    const [Text,setText] = useState("View");
+    const Text1 = useState("Past Dontions");
+
     useEffect(() => {
         const timer = setTimeout(async () => {
             const response = await axios.post('/donator/',{});
@@ -27,6 +30,7 @@ const Donors = (props) => {
                         <th>Email</th>
                         {/* <th>Region</th> */}
                         <th>Items Donated</th>
+                        <th>{Text1}</th>
                     </tr>
                     {
                         donorsData.map((donor)=>{
@@ -37,6 +41,7 @@ const Donors = (props) => {
                                     <td>{donor.email}</td>
                                     {/* <td>{donor.region}</td> */}
                                     <td>{donor.items.length}</td>
+                                    <td><a href="#" class="btn" onClick={()=> setText("Viewed")}>{Text}</a></td>
                                 </tr> 
                             );
                         })
